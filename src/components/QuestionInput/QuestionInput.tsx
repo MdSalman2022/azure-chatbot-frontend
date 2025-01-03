@@ -81,7 +81,7 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, conv
 
   return (
     <div
-      className="flex flex-row h-[120px] absolute left-[16.5%] md:left-[6.5%] right-0 top-0 bottom-0 bg-white rounded-lg"
+      className="flex flex-row h-[120px] w-full bg-white rounded-lg relative"
       style={{
         boxShadow: '0 8px 16px rgba(0,0,0,0.14), 0 0 2px rgba(0,0,0,0.12)'
       }}>

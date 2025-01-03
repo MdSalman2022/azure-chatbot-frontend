@@ -1,6 +1,12 @@
 import { useRef, useState, useEffect, useContext, useLayoutEffect } from 'react'
 import { CommandBarButton, IconButton, Dialog, DialogType, Stack } from '@fluentui/react'
-import { SquareRegular, ShieldLockRegular, ErrorCircleRegular } from '@fluentui/react-icons'
+import {
+  SquareRegular,
+  ShieldLockRegular,
+  ErrorCircleRegular,
+  GoSidebarCollapse,
+  GoSidebarExpand
+} from '@fluentui/react-icons'
 
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -772,7 +778,7 @@ const Chat = () => {
   }
 
   return (
-    <div className={styles.container} role="main">
+    <div className="h-screen w-full flex flex-col justify-between relative overflow-y-auto">
       {showAuthMessage ? (
         <Stack className={styles.chatEmptyState}>
           <ShieldLockRegular
@@ -801,8 +807,12 @@ const Chat = () => {
           </h2>
         </Stack>
       ) : (
-        <div className="h-full flex flex-1 bg-red-600">
-          <div className={styles.chatContainer}>
+        <div className="h-full flex flex-col bg-[#292929]">
+          <div
+            className="flex flex-col h-full items-center overflow-y-auto "
+            style={{
+              boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.14), 0px 0px 2px rgba(0, 0, 0, 0.12)'
+            }}>
             {!messages || messages.length < 1 ? (
               <Stack className={styles.chatEmptyState}>
                 <img src={logo} className={styles.chatIcon} aria-hidden="true" />
@@ -879,7 +889,27 @@ const Chat = () => {
               </div>
             )}
 
-            <div className="bg-black w-full h-24"></div>
+            <div className="sticky flex-none pt-3 pb-6 px-6 h-fit w-[90%] max-w-[90%] md:w-[calc(100%-100px)] md:max-w-[1028px] mb-12 mt-2  border border-white rounded-2xl">
+              <div className="w-full flex flex-col gap-3 items-center justify-center relative">
+                <button className="flex justify-center items-center gap-3 bg-gray h-10 rounded-full px-4 text-white">
+                  <SquareRegular className={'w-[20px] h-[20px] text-white'} aria-hidden="true" />{' '}
+                  <span className="text-white">Stop generating</span>
+                </button>
+                <QuestionInput
+                  clearOnSend
+                  placeholder="Type a new question..."
+                  disabled={isLoading}
+                  onSend={(question, id) => {
+                    appStateContext?.state.isCosmosDBAvailable?.cosmosDB
+                      ? makeApiRequestWithCosmosDB(question, id)
+                      : makeApiRequestWithoutCosmosDB(question, id)
+                  }}
+                  conversationId={
+                    appStateContext?.state.currentChat?.id ? appStateContext?.state.currentChat?.id : undefined
+                  }
+                />
+              </div>
+            </div>
 
             {/*  <Stack horizontal className={styles.chatInput}>
               {isLoading && messages.length > 0 && (

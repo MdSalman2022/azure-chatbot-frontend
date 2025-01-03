@@ -9,6 +9,7 @@ import { HistoryButton, ShareButton } from '../../components/common/Button'
 import { AppStateContext } from '../../state/AppProvider'
 
 import styles from './Layout.module.css'
+import Sidebar from '../../components/shared/Sidebar'
 
 const Layout = () => {
   const [isSharePanelOpen, setIsSharePanelOpen] = useState<boolean>(false)
@@ -74,7 +75,7 @@ const Layout = () => {
   }, [])
 
   return (
-    <div className={styles.layout}>
+    <div className="flex h-screen w-full overflow-x-hidden">
       {/* <header className={styles.header} role={'banner'}>
         <Stack horizontal verticalAlign="center" horizontalAlign="space-between">
           <Stack horizontal verticalAlign="center">
@@ -95,7 +96,14 @@ const Layout = () => {
           </Stack>
         </Stack>
       </header> */}
-      <Outlet />
+      <div className="h-full">
+        <Sidebar />
+      </div>
+      <div className="w-full flex flex-col h-full">
+        <div className="overflow-y-auto w-full overflow-x-hidden">
+          <Outlet />
+        </div>
+      </div>
       <Dialog
         onDismiss={handleSharePanelDismiss}
         hidden={!isSharePanelOpen}
